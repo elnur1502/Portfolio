@@ -54,7 +54,10 @@ def stop_container(state: dict):
         return {"phase": "STOP_CONTAINER", "status_container": "error"}
 
 def get_file_info(state:dict):
-    file_name = state["extra_file_name"]
+    try:
+        file_name = state["extra_file_name"].split('data/')[1]
+    except:
+        file_name = state["extra_file_name"]
     file_extension = file_name.split('.')[1]
     if file_extension == 'xlsx':
         df = pd.read_excel('data/' + file_name)
