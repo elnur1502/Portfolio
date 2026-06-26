@@ -9,7 +9,7 @@ import asyncio
 import time
 from agents.agent_logs import logger
 
-load_dotenv()
+load_dotenv(override=True)
 
 rec_limit = 100
 
@@ -42,18 +42,17 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             with open(file_path, "rb") as f:
                 await update.message.reply_document(document=f)
                 f.close()
+        
+        else:
+            await update.message.reply_text(
+                f"Something went wrong, please check logs\n\nTime spent: {duration:.2f}s"
+            )
 
     except Exception as e:
         logger.info('Agent error: ' + str(e))
         await update.message.reply_text(
-            f"Something went wrong, please check logs\n\nTime spent: {duration:.2f}s"
+            f"Something went wrong, please check logs"
         )
-
-    else:
-        await update.message.reply_text(
-            f"Something went wrong, please check logs\n\nTime spent: {duration:.2f}s"
-        )
-
 
 def main():
     app = Application.builder().token(os.getenv("telegram_bot_api")).build()
