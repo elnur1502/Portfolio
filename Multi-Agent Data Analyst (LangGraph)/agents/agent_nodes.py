@@ -469,7 +469,6 @@ def code_check(state: dict):
                     "phase": 'CODE_CHECK'} 
                     
         except Exception as e:
-            print(e)
             logger.info('ERROR: Problem with parsing: ' + str(code) + '\n' + 'Solve this error: ' + str(e))
             return {"message_to_solve": 'Problem with parsing: ' + str(code) + '\n' + 'Solve this error: ' + str(e),
                                 "step_code_ok": False,

@@ -109,7 +109,6 @@ def route_next_step(state: dict):
                     executor_sec = state.get('executor_sec', 1)
                     extractor_sec = state.get('extractor_sec', 1)
                     selector_sec = state.get('selector_sec', 1)
-                    print(executor_sec)
                     try:
                         selector_tps = selector_output_tokens/selector_sec
                     except:

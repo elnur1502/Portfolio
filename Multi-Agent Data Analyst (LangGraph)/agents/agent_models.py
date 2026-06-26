@@ -19,9 +19,9 @@ free_model = 'openai/gpt-oss-120b:free' ## good enough for coding and overal rea
 #actually text-embedding-3-small is quite enough for small database, but there are a lot of business termins 
 # therefore it's better to use larger embedding model
 embed_model = OpenAIEmbeddings(
-        base_url="https://ai.sumopod.com/v1",
-        api_key=os.getenv("api_key"),
-        model='text-embedding-3-large',
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.getenv("Openrouter_api"),
+        model='openai/text-embedding-3-large',
         max_retries=5,
         timeout=60.0
         )
@@ -56,9 +56,9 @@ model_selector = ChatOpenAI(
 
 #Planner - smarter model
 model_planner = ChatOpenAI(
-        base_url="https://ai.sumopod.com/v1",
-        api_key=os.getenv("api_key"),
-        model='MiniMax-M2.7-highspeed',
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.getenv("Openrouter_api"),
+        model='minimax/minimax-m2.7',
         temperature=0.1, # strong prompt follow for strict json output
         top_p=0.95,
         max_retries=5,
