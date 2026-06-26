@@ -76,7 +76,7 @@ def run_code(req: CodeRequest):
         #     "jdbc:impala://*sensitive_information",
         #     jars=jar_path
         # )
-        conn = your_connection
+        conn = None # your_connection
         cursor = conn.cursor()
         cursor.execute(req.code)
         cols = [str(d[0]) for d in cursor.description]
