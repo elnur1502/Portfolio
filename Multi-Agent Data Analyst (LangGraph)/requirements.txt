@@ -5,37 +5,37 @@
 # =====================================================================
 
 # --- Core LLM orchestration ---
-langchain
-langchain-core
-langchain-openai
-langgraph
-langgraph-checkpoint
+langchain>=1.0.0
+langchain-core>=1.0.0
+langchain-openai>=0.3.0
+langgraph>=1.2.0
+langgraph-checkpoint>=2.0.0
 
 # --- Data validation / structured output ---
-pydantic
+pydantic>=2.9.0
 
 # --- RAG / vector store ---
-chromadb
+chromadb>=1.5.0
 
 # --- SQL parsing & safety ---
-sqlglot
+sqlglot>=30.0.0
 
 # --- Telegram bot ---
-python-telegram-bot
+python-telegram-bot>=22.0
 
 # --- HTTP & config ---
-requests
-python-dotenv
+requests>=2.32.0
+python-dotenv>=1.0.0
 
 # --- Data handling (used by agent_nodes.py for table_rerank + get_file_info) ---
-pandas
-numpy
-openpyxl
-
+pandas>=2.2.0
+numpy>=2.0.0
+openpyxl>=3.1.0
 
 # =====================================================================
 # Test / eval dependencies (install with: pip install -r requirements.txt)
 # =====================================================================
-pytest
-pytest-asyncio
-deepeval
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+deepeval>=3.0.0
+

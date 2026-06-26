@@ -22,7 +22,7 @@ class MessagesState(TypedDict):
     current_step_plan: dict
     required_output: str
 
-    # Метрики
+    # Metrics
     planner_input_tokens: int
     planner_output_tokens: int
     planner_sec: float
@@ -78,7 +78,3 @@ class MessagesState(TypedDict):
 
     # File
     file_info: str
-
-    # Previous error solutions
-    # error_text: str
-    # result_top_k_solutions: str
