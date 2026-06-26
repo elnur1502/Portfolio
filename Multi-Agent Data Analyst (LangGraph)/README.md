@@ -219,4 +219,4 @@ MIT — see [`LICENSE`](./LICENSE).
 ## ✍️ Contacts & Hiring
 
 This project was built as part of my transition from BI/Data Analytics to AI Engineering. If you're looking for a Junior/Mid AI Engineer who understands both data pipelines and multi-agent system architecture, let's connect!
-Feel free to [open an issue](https://github.com/<your-handle>/<repo>/issues) or reach out on [Telegram](https://t.me/elnur1502).
+Feel free to [open an issue](https://github.com/elnur1502/Portfolio/issues) or reach out on [Telegram](https://t.me/elnur1502).
