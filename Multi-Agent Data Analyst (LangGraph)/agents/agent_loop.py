@@ -1,6 +1,12 @@
 from langgraph.graph import StateGraph, START, END
 from agents.agent_logs import logger
 
+MAX_PLAN_RETRIES = 3
+MAX_EXECUTOR_RETRIES = 3
+MAX_PYTHON_SQL_RETRIES = 3
+MAX_TABLES_RETRIES = 4
+MAX_EXTRACTOR_RETRIES = 3
+
 def route_next_step(state: dict):
     plan_loop_num = state.get("plan_loop",0)
     same_step_loop = state.get("same_step_loop",0)
@@ -10,38 +16,38 @@ def route_next_step(state: dict):
     extractor_loop = state.get('extractor_loop', 0)
     tables_check_loop = state.get('tables_check_loop', 0)
     phase = state["phase"]
-    if plan_loop_num > 3: # no more than 3 retries for planning
+    if plan_loop_num > MAX_PLAN_RETRIES: # no more than N retries for planning
         logger.info("Couldn't create a valid plan. Multi-agent stopped.")
         return "stop_container"
-    elif same_step_loop > 3: # no more than 3 retries for executor code
+    elif same_step_loop > MAX_EXECUTOR_RETRIES: # no more than N retries for executor code
         if help_loop == 0:
             logger.info("Couldn't create a valid code for a given step. Asking planner for help...") # no more than once for any step
             return "planner_help"
         else:
             logger.info("Couldn't create a valid code for a given step even with a planner help. Multi-agent stopped.")
             return "stop_container"
-    elif python_loop > 3:
+    elif python_loop > MAX_PYTHON_SQL_RETRIES:
         if help_loop == 0:
             logger.info("Couldn't run the code. Asking planner for help...") # no more than once for any step
             return "planner_help"
         else:
             logger.info("Couldn't run the code even with a planner help. Multi-agent stopped.")
             return "stop_container"
-    elif sql_loop > 3:
+    elif sql_loop > MAX_PYTHON_SQL_RETRIES:
         if help_loop == 0:
             logger.info("Couldn't create a valid query code for a given step. Asking planner for help...") # no more than once for any step
             return "planner_help"
         else:
             logger.info("Couldn't create a valid query code for a given step even with a planner help. Multi-agent stopped.")
             return "stop_container"
-    elif tables_check_loop > 4:
+    elif tables_check_loop > MAX_TABLES_RETRIES:
         if state['sql_check_status'] == 'error':
             logger.info("Couldn't create a valid JSON from a given top-k tables. Multi-agent stopped.")
             return "stop_container"
         else:
             logger.info("Couldn't select tables from a given top-k tables. Multi-agent stopped.")
             return "stop_container"
-    elif extractor_loop > 3:
+    elif extractor_loop > MAX_EXTRACTOR_RETRIES:
         logger.info("Couldn't create a valid JSON for a given task. Multi-agent stopped.")
         return "stop_container"
     else:

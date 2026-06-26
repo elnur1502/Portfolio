@@ -15,7 +15,7 @@ def run_sql(code, output_name, last_step):
     )
     return r.json()
 
-def reset_short_memory():
+def reset_short_memory(): ## not needed in the current system, but could be usefull when Docker container live all the time
     r = requests.post(
         "http://localhost:8000/reset"
     )

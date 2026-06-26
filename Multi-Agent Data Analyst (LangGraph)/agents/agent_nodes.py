@@ -2,23 +2,24 @@ import re
 import pandas as pd
 import numpy as np
 from langchain_core.messages import SystemMessage
-from typing import Literal
-from langgraph.graph import StateGraph, START, END
-import json
-from jsonschema import validate
 import time
 import chromadb
 import subprocess
 import io
+import os
 from agents.agent_models import *
 from agents.agent_prompts import *
 from agents.agent_tools import *
 from agents.agent_logs import logger
 from langchain_core.callbacks import UsageMetadataCallbackHandler
-from pydantic import ValidationError
 import sqlglot
 from sqlglot import exp
 import ast
+from dotenv import load_dotenv
+
+load_dotenv()
+
+container_name = str(os.getenv('container_name'))
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 Chroma_DB_DIR = os.path.join(CURRENT_DIR, "..", "chroma_db")
@@ -29,14 +30,14 @@ tables_collection = client.get_or_create_collection(name="tables")
 
 def start_container(state: dict):
     try:
-        subprocess.run(["docker", "start", 'agent_runner'], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["docker", "start", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         logger.info("Docker container started")
         return {"phase": "START_CONTAINER", "status_container": "success", "top_k": 30, "top_n": 10}
-    except:
+    except Exception as e:
         try:
-            subprocess.run(["docker", "stop", 'agent_runner'], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["docker", "stop", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(10)
-            subprocess.run(["docker", "start", 'agent_runner'], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["docker", "start", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             logger.info("Docker container started")
             return {"phase": "START_CONTAINER", "status_container": "success", "top_k": 30, "top_n": 10}
         except subprocess.CalledProcessError as e:
@@ -45,7 +46,7 @@ def start_container(state: dict):
 
 def stop_container(state: dict):
     try:
-        subprocess.run(["docker", "stop", 'agent_runner'], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["docker", "stop", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         logger.info("Docker container stopped")
         return {"phase": "STOP_CONTAINER", "status_container": "success"}
     except subprocess.CalledProcessError as e:
