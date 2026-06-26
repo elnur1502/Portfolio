@@ -1,0 +1,41 @@
+# =====================================================================
+# Multi-Agent Data/BI Analyst — orchestrator dependencies
+# =====================================================================
+# Python 3.12+ required
+# =====================================================================
+
+# --- Core LLM orchestration ---
+langchain
+langchain-core
+langchain-openai
+langgraph
+langgraph-checkpoint
+
+# --- Data validation / structured output ---
+pydantic
+
+# --- RAG / vector store ---
+chromadb
+
+# --- SQL parsing & safety ---
+sqlglot
+
+# --- Telegram bot ---
+python-telegram-bot
+
+# --- HTTP & config ---
+requests
+python-dotenv
+
+# --- Data handling (used by agent_nodes.py for table_rerank + get_file_info) ---
+pandas
+numpy
+openpyxl
+
+
+# =====================================================================
+# Test / eval dependencies (install with: pip install -r requirements.txt)
+# =====================================================================
+pytest
+pytest-asyncio
+deepeval
