@@ -212,7 +212,7 @@ pytest tests/agent_evals
 
 ## 📝 License
 
-MIT — see [`LICENSE`](./LICENSE).
+MIT — see [`LICENSE`](https://github.com/elnur1502/Portfolio/blob/main/LICENSE).
 
 --
 
