@@ -1,16 +1,11 @@
-from pydantic import ValidationError
-
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, Update,
-                      InlineKeyboardButton, InlineKeyboardMarkup)
-from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
-                          ContextTypes, ConversationHandler, MessageHandler, filters)
+from telegram import Update
+from telegram.ext import (Application, ContextTypes, MessageHandler, filters)
 
 from graph import agent
 import os
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
 import asyncio
-from state import MessagesState
 import time
 from agents.agent_logs import logger
 
