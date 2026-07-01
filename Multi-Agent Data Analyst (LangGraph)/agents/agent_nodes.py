@@ -32,14 +32,14 @@ def start_container(state: dict):
     try:
         subprocess.run(["docker", "start", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         logger.info("Docker container started")
-        return {"phase": "START_CONTAINER", "status_container": "success", "top_k": 30, "top_n": 10}
+        return {"phase": "START_CONTAINER", "status_container": "success", "top_n": 30, "top_k": 10}
     except Exception as e:
         try:
             subprocess.run(["docker", "stop", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(10)
             subprocess.run(["docker", "start", container_name], timeout=30, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             logger.info("Docker container started")
-            return {"phase": "START_CONTAINER", "status_container": "success", "top_k": 30, "top_n": 10}
+            return {"phase": "START_CONTAINER", "status_container": "success", "top_n": 30, "top_k": 10}
         except subprocess.CalledProcessError as e:
             logger.info("ERROR: Coudln't start Docker container. Error: " + str(e))
             return {"phase": "START_CONTAINER", "status_container": "error"}
