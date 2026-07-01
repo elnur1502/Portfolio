@@ -53,35 +53,24 @@ def stop_container(state: dict):
         logger.info("ERROR: Coudln't stop Docker container. Error: " + str(e))
         return {"phase": "STOP_CONTAINER", "status_container": "error"}
 
-def get_file_info(state:dict):
-    try:
-        file_name = state["extra_file_name"].split('data/')[1]
-    except:
-        file_name = state["extra_file_name"]
-    file_extension = file_name.split('.')[1]
-    if file_extension == 'xlsx':
-        df = pd.read_excel('data/' + file_name)
-    elif file_extension == 'csv':
-        df = pd.read_csv('data/' + file_name)
-
-    buffer = io.StringIO()
-    df.info(buf=buffer)
-
-    return {"phase": "FILE_INFO", "file_info": buffer.getvalue()}
-
 def keyword_score(query, table_doc, table_metadata):
-    score = 0
+    score = 0.0
+    usage_prior = float(table_metadata.get("usage_count", 0))
     
-    for word in query.lower().replace('.', '').replace(',', '').split():
-        score += table_metadata['usage_count']
-        if word in table_metadata["table_name"].lower():
+    for word in query.lower().replace(".", " ").replace(",", " ").split():
+        if not word:
+            continue
+        if word in table_metadata.get("table_name", "").lower():
             score += 3
-        if word in table_metadata["columns"].lower():
+        if word in table_metadata.get("columns", "").lower():
             score += 2
         if word in str(table_doc).lower():
             score += 1
             
-    return score
+        # Flat, bounded popularity prior (added once per word).
+        score += min(usage_prior, 5) * 0.1
+
+    return score / 10.0
 
 def structured_invoke(model, schema, messages, callbacks):
     try:
@@ -111,32 +100,40 @@ def extractor_check(state:dict):
                 return {'phase': "EXTRACTION_CHECK", "extra_check_status": 'success', "extra_type": extra_pre['type'], "original_task": extra_pre['original_query'], "extra_confidence": str(extra_pre['confidence']), "extra_file_name": str(extra_pre['file_name']), "extractor_loop": 0, 'extra_check_message': ''}
 
 def table_rerank(state: dict):
-    query_text = state['query_text']
-    query_embed = embed_model.embed_query(query_text)
-    query = np.array([query_embed]).astype("float32")
+    query_text = state["query_text"]
+    top_n = state["top_n"]
+    top_k = state["top_k"]
 
-    top_n = state['top_n']
-    top_k = state['top_k']
-    result_top_n = []
-    result_top_k = []
+    query_embed = np.array(
+        [embed_model.embed_query(query_text)], dtype="float32"
+    )
 
     results = tables_collection.query(
-        query_embeddings=query,
-        n_results=top_n
-        )
+        query_embeddings=query_embed,
+        n_results=top_n,
+    )
 
-    for i in range(len(results['ids'][0])):
-        score = keyword_score(query_text, results['documents'][0][i], results['metadatas'][0][i])
-        table_data = {}
-        embedding_score = top_n/(i+1)
-        final_score = 0.6 * embedding_score + 0.4 * score
-        table_data['table_name'] = str(results['metadatas'][0][i]['table_name'])
-        table_data['score'] = final_score
-        table_data['info'] = str(results['documents'][0][i])
-        result_top_n.append(table_data)
-        
-    result_top_k = sorted(result_top_n, key = lambda x: x['score'], reverse=True)[:top_k]
-    result_top_k_info = [t['info'] for t in result_top_k]
+    distances = results.get("distances", [[]])[0]
+    docs     = results.get("documents",[[]])[0]
+    metas    = results.get("metadatas", [[]])[0]
+
+    candidates = []
+    for rank, (doc, meta) in enumerate(zip(docs, metas), start=1):
+        lex = keyword_score(query_text, doc, meta) # in [0, 1]
+        d = float(distances[rank - 1])
+        embed_component = 1.0 / (1.0 + d)
+        final_score = 0.6 * embed_component + 0.4 * lex
+
+        candidates.append({
+                "table_name": str(meta["table_name"]),
+                "score":      final_score,
+                "info":       str(doc),
+            })
+
+    candidates.sort(key=lambda x: x["score"], reverse=True)
+    top = candidates[:top_k]
+
+    result_top_k_info = [t["info"] for t in top]
 
     logger.info('Selecting neccessary tables...')
     return {'phase': 'TABLE_RERANKING', 'result_top_k_info': result_top_k_info}
