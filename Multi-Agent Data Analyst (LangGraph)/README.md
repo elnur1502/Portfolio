@@ -6,7 +6,7 @@ The pipeline is a multi-agent system built on **LangGraph**, with explicit
 schemas, a sandboxed executor, and a self-recovery loop when the executor gets
 stuck.
 
-![Python](https://img.shields.io/badge/python-3.13-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![LangGraph](https://img.shields.io/badge/LangGraph-stategraph-orange)
+![Python](https://img.shields.io/badge/python-3.12-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![LangGraph](https://img.shields.io/badge/LangGraph-stategraph-orange)
 
 ---
 
