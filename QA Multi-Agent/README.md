@@ -10,6 +10,10 @@ persistent Chroma memory.
 
 ---
 
+https://github.com/user-attachments/assets/8cbf166b-ca17-4d66-83d4-344a571b3e8e
+
+---
+
 ## Architecture
 
 ```mermaid
