@@ -1,0 +1,127 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Secrets & local config — never commit
+# ─────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Python
+# ─────────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.cache/
+.tox/
+
+# Mypy / ruff / black caches
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Runtime data — never commit user data, agent memory, or logs
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Long-term memory (ChromaDB persistent store)
+chroma_db/
+!chroma_db/.gitkeep
+!chroma_db/README.md
+
+# User-shared data folder (mounted as /app/data in Docker).
+# The folder structure is documented in README; CONTENTS are runtime-only.
+# Recursive ignore + per-folder .gitkeep exceptions so the directory
+# tree survives `git clone` but generated files don't end up in the repo.
+data/**
+!data/inputs/.gitkeep
+!data/inputs/
+!data/outputs/
+!data/outputs/.gitkeep
+!data/outputs/tests/.gitkeep
+!data/outputs/tests/
+!data/outputs/docs/.gitkeep
+!data/outputs/docs/
+!data/outputs/locators/.gitkeep
+!data/outputs/locators/
+
+# Agent logs
+logs/
+!logs/.gitkeep
+
+# Playwright caches (in case Playwright is run on the host)
+.playwright/
+playwright-report/
+test-results/
+playwright/.cache/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Docker / compose artefacts
+# ─────────────────────────────────────────────────────────────────────────────
+# Local compose overrides (uncomment if you keep one)
+# docker-compose.override.yml
+
+# ─────────────────────────────────────────────────────────────────────────────
+# IDEs & editors
+# ─────────────────────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim / Emacs / Sublime
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+*.sublime-project
+*.sublime-workspace
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OS junk
+# ─────────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Misc
+# ─────────────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp
+*.orig
+*.rej
+*.log
+!logs/.gitkeep
