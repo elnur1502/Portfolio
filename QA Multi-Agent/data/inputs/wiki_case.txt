@@ -1,0 +1,5 @@
+Step 1: go to https://en.wikipedia.org/wiki/Main_Page, ER: website loaded
+Step 2: Press menu button, ER: main menu opened
+Step 3: Press Random article, ER: random article loaded (url has changed)
+
+Do it in headless mode

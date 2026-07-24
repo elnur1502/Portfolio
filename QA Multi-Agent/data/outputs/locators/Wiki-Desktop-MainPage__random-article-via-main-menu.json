@@ -1,0 +1,35 @@
+[
+  {
+    "test_case_id": "[Wiki][Desktop][MainPage]",
+    "page": "https://en.wikipedia.org/wiki/Main_Page",
+    "element_name_human": "Main menu button (opens the dropdown)",
+    "selector_chain": "getByRole('button', { name: 'Main menu' })",
+    "kind": "role",
+    "last_verified_at": "2026-07-24T10:21:00Z",
+    "post_action_state": "clickable; triggers vector-main-menu-dropdown",
+    "dirty": false,
+    "note": "Underlying element is input#vector-main-menu-dropdown-checkbox (no data-testid). Third-party markup; getByRole used as codex fallback for elements without data-*."
+  },
+  {
+    "test_case_id": "[Wiki][Desktop][MainPage]",
+    "page": "https://en.wikipedia.org/wiki/Main_Page",
+    "element_name_human": "Random article link inside the opened main menu",
+    "selector_chain": "getByRole('link', { name: 'Random article' })",
+    "kind": "role",
+    "last_verified_at": "2026-07-24T10:20:30Z",
+    "post_action_state": "visible only after menu opened; href=/wiki/Special:Random",
+    "dirty": false,
+    "note": "Link is not in DOM when menu is closed (found:false via evaluate). Becomes attached/visible after clicking Main menu button. No data-testid."
+  },
+  {
+    "test_case_id": "[Wiki][Desktop][MainPage]",
+    "page": "https://en.wikipedia.org/wiki/Main_Page",
+    "element_name_human": "Page URL after navigation",
+    "selector_chain": "page.url() / expect(page).toHaveURL(...)",
+    "kind": "url",
+    "last_verified_at": "2026-07-24T10:21:00Z",
+    "post_action_state": "starts at https://en.wikipedia.org/wiki/Main_Page, changes after Random article click",
+    "dirty": false,
+    "note": ""
+  }
+]
